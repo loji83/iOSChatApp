@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LoginViewController.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationBarDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
+@property UINavigationController* mainNav;
+@property LoginViewController* logInViewController;
 
 @end
 

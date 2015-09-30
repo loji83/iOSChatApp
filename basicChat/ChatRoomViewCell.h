@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  ChatRoomViewCell.h
 //  basicChat
 //
 //  Created by Kang on 2015. 9. 30..
@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface ChatRoomViewCell : UITableViewCell
 
+@property UIImageView* pic;
+@property UILabel* textMessege;
 
 @end
-

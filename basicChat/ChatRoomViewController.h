@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ChatRoomViewCell.h"
 
-@interface ChatRoomViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface ChatRoomViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,  UITextFieldDelegate>
 
 @property UITableView* entireChat;
 @property UILabel* textMessage;
+@property ChatRoomViewCell* cell;
 
 @end

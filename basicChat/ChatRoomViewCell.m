@@ -12,14 +12,30 @@
 
 @synthesize pic, textMessege;
 
--(ChatRoomViewCell*) init
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
     
-    ChatRoomViewCell* cell = [[ChatRoomViewCell alloc]initWithFrame:CGRectMake(0,0, self.window.frame.size.width, 160)];
-    cell.backgroundColor = [UIColor orangeColor];
+        self.backgroundColor = [UIColor brownColor];
+        
+        self.pic = [[UIView alloc]init];
+        [self.pic setFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
+        
+        
+        
+        self.textMessege = [[UILabel alloc]init];
+        [self.textMessege setFrame:CGRectMake(self.frame.size.height , 0, self.frame.size.width - self.frame.size.height, self.frame.size.height)];
+        
+        
+        [self addSubview:self.pic];
+        [self addSubview:self.textMessege];
+    }
     
-    return cell;
     
+    
+    
+    return self;
 }
 
 @end

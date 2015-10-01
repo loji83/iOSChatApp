@@ -10,7 +10,7 @@
 
 @interface ChatRoomViewCell : UITableViewCell
 
-@property UIImageView* pic;
+@property UIView* pic;
 @property UILabel* textMessege;
 
 @end

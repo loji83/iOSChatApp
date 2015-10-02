@@ -512,6 +512,7 @@
 				3DB268A71BBB6455000A4590 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3DB268A81BBB6455000A4590 /* Build configuration list for PBXNativeTarget "basicChatTests" */ = {
 			isa = XCConfigurationList;
@@ -520,6 +521,7 @@
 				3DB268AA1BBB6455000A4590 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3DB268AB1BBB6455000A4590 /* Build configuration list for PBXNativeTarget "basicChatUITests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +530,7 @@
 				3DB268AD1BBB6455000A4590 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

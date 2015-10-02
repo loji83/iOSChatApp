@@ -12,7 +12,8 @@
 @interface ChatRoomViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,  UITextFieldDelegate>
 
 @property UITableView* entireChat;
-@property UILabel* textMessage;
+@property UITextField* textMessage;
 @property ChatRoomViewCell* cell;
+@property NSMutableArray* dataArr;
 
 @end

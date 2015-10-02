@@ -15,17 +15,24 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    NSLog(@"%d", (int)self.frame.size.width);
+    NSLog(@"%d", (int)self.frame.size.height);
+
+    
     if (self) {
     
         self.backgroundColor = [UIColor brownColor];
+        [self setFrame:CGRectMake(0,0, [[UIScreen mainScreen]bounds].size.width, 90)];
+
         
         self.pic = [[UIView alloc]init];
         [self.pic setFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
-        
+        self.pic.backgroundColor = [UIColor yellowColor];
         
         
         self.textMessege = [[UILabel alloc]init];
         [self.textMessege setFrame:CGRectMake(self.frame.size.height , 0, self.frame.size.width - self.frame.size.height, self.frame.size.height)];
+        self.textMessege.backgroundColor = [UIColor orangeColor];
         
         
         [self addSubview:self.pic];

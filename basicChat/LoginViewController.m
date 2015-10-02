@@ -18,7 +18,7 @@
     
     self.title = @"Log in";
     self.view.backgroundColor = [UIColor redColor];
-    
+
     enterChat = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 50)];
     enterChat.center = self.view.center;
     enterChat.backgroundColor = [UIColor blueColor];

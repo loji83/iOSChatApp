@@ -15,14 +15,12 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    NSLog(@"%d", (int)self.frame.size.width);
-    NSLog(@"%d", (int)self.frame.size.height);
 
     
     if (self) {
     
         self.backgroundColor = [UIColor brownColor];
-        [self setFrame:CGRectMake(0,0, [[UIScreen mainScreen]bounds].size.width, 90)];
+        [self setFrame:CGRectMake(0,0, [[UIScreen mainScreen]bounds].size.width, 70)];
 
         
         self.pic = [[UIView alloc]init];
@@ -38,9 +36,7 @@
         [self addSubview:self.pic];
         [self addSubview:self.textMessege];
     }
-    
-    
-    
+  
     
     return self;
 }

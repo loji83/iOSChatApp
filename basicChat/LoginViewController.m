@@ -36,7 +36,7 @@
 
 -(void)enterChat:(UIButton *)enterButton
 {
-    [[self navigationController] pushViewController:self.chatRoomController animated:true];
+    [[self navigationController] pushViewController:chatRoomController animated:true];
 }
 
 

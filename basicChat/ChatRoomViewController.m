@@ -8,6 +8,8 @@
 
 #import "ChatRoomViewController.h"
 
+#import <errno.h>
+
 @implementation ChatRoomViewController
 {
     float kbHeight;
@@ -17,66 +19,84 @@
 @synthesize textMessage;
 @synthesize cell;
 @synthesize dataArr;
+@synthesize server_sockfd;
 
-//-(void) viewDidLoad
-//{
-//    
-//}
+
 
 -(void) viewDidLoad
 {
     [super viewDidLoad];
+    
     NSLog(@"didLoad");
+    
     self.title = @"ChatRoom";
     
     entireChat = [[UITableView alloc]init];
     entireChat.backgroundColor = [UIColor lightGrayColor];
     entireChat.rowHeight = 70;
     
-    [entireChat setFrame:CGRectMake(0,0,self.view.frame.size.width, self.view.frame.size.height*14/15)];
-    NSLog(@"%@", [entireChat description]);
+    [entireChat setFrame:CGRectMake(0,0,self.view.frame.size.width, (self.view.frame.size.height*14/15))];
     [entireChat setDataSource:self];
     [entireChat setDelegate:self];
     
     textMessage = [[UITextField alloc]initWithFrame:CGRectMake(0, entireChat.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/15)];
     textMessage.backgroundColor = [UIColor blueColor];
     [textMessage setDelegate:self];
-    
-    dataArr = [[NSMutableArray alloc]init];
-    [dataArr addObject:@"들어가라"];
-    [dataArr addObject:@"제발"];
-    [dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발"];[dataArr addObject:@"제발 좀~~~~"];
-    
-    
+
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
     
     [self.view addSubview:self.entireChat];
     [self.view addSubview:self.textMessage];
-    NSLog(@"%f",entireChat.contentSize.height);
-  
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [self connectServer];
     
-    if(entireChat.frame.size.height < entireChat.contentSize.height)
-    {
-        
-        CGPoint offset = CGPointMake(0, entireChat.contentSize.height - entireChat.frame.size.height + self.navigationController.navigationBar.frame.size.height + 20);
-        [entireChat setContentOffset:offset animated:YES];
-    }
+    dataArr = [[NSMutableArray alloc]init];
+    
+    [dataArr addObject:@"들어가라"];
+    [dataArr addObject:@"제발1"];
+    [dataArr addObject:@"제발2"];
+    [dataArr addObject:@"제발3"];
+    [dataArr addObject:@"제발4"];
+    [dataArr addObject:@"제발5"];
+    [dataArr addObject:@"제발6"];
+    [dataArr addObject:@"제발7"];
+    [dataArr addObject:@"제발8"];
+    [dataArr addObject:@"제발9"];
+    [dataArr addObject:@"제발10"];
+    [dataArr addObject:@"제발11"];
+    [dataArr addObject:@"제발12"];
+    [dataArr addObject:@"제발 좀~~~~"];
+    
+    [self scrollToBottom];
+    
 }
+
+-(void)scrollToBottom
+{
+    [entireChat reloadData];
+    NSIndexPath* ip = [NSIndexPath indexPathForRow: [entireChat numberOfRowsInSection:0]-1 inSection:0];
+    [entireChat scrollToRowAtIndexPath:ip  atScrollPosition:UITableViewScrollPositionTop animated:true];
+    
+}
+
+
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField
 {
+    printf("input\n");
+    
     if(![textMessage.text isEqual:@""])
     {
-    [dataArr addObject:textMessage.text];
-    NSLog(@"%@",[dataArr description]);
-    textMessage.text = @"";
-    [entireChat reloadData];
+        [dataArr addObject:textMessage.text];
+        textMessage.text = @"";
+        [self scrollToBottom];
     }
+    
     [textMessage resignFirstResponder];
     
     return true;
@@ -86,9 +106,10 @@
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
+    
     return [dataArr count];
 }
+
 
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -98,7 +119,7 @@
     {
         cell = [[ChatRoomViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
     }
-
+    
     cell.textMessege.text = [dataArr objectAtIndex:indexPath.row];
     return cell;
 }
@@ -119,12 +140,53 @@
 
 -(void) viewWillDisappear:(BOOL)animated
 {
+    
     [self.textMessage resignFirstResponder];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    close(server_sockfd);
+    printf("socket close\n");
     cell = nil;
     self.view = nil;
     
 }
+
+-(void) connectServer
+{
+    struct sockaddr_in serveraddr;
+    int client_len;
+    
+    NSDictionary* inputData = [[NSDictionary alloc]init];
+    
+    if((server_sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
+    {
+        printf("socket error\n");
+    }
+    
+    serveraddr.sin_family = AF_INET;
+    serveraddr.sin_addr.s_addr = inet_addr("192.168.0.23");
+    serveraddr.sin_port = htons(8000);
+    
+    client_len = sizeof(serveraddr);
+    
+    if((connect(server_sockfd, (struct sockaddr*) &serveraddr, client_len)) == 0)
+    {
+        printf("connect complete\n");
+    }else
+    {
+        printf("connect fail\n");
+    };
+    
+    char message[1024] = "dfghdfg";
+    
+    if((send(server_sockfd, message, 1024, 0)) == -1)
+    {
+        printf("send error\n");
+    }else{
+        printf("send ok\n");
+    };
+    
+}
+
 
 @end

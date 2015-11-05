@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "ChatRoomViewController.h"
 
-@interface LoginViewController : UIViewController
+@interface LoginViewController : UIViewController <UITextViewDelegate>
 
 @property (strong, nonatomic)UIButton* enterChat;
+@property (strong, nonatomic)UITextField* userName;
 @property (strong, nonatomic)ChatRoomViewController* chatRoomController;
-
+@property (strong, nonatomic)UIView* totalLoginView;
 -(void) enterChat:(UIButton*)enterButton;
 
 @end

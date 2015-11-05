@@ -19,7 +19,13 @@
 @synthesize textMessage;
 @synthesize cell;
 @synthesize dataArr;
+
+@synthesize dateFormat;
+
 @synthesize server_sockfd;
+
+@synthesize chatName;
+@synthesize chatContent;
 
 
 
@@ -46,31 +52,56 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
     
+    dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"yyyy MM dd, hh mm ss"];
+    
     [self.view addSubview:self.entireChat];
     [self.view addSubview:self.textMessage];
     
 }
 
+
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [self connectServer];
     
-    dataArr = [[NSMutableArray alloc]init];
+    NSLog(@"my Name : %@", self.chatName);
     
-    [dataArr addObject:@"들어가라"];
-    [dataArr addObject:@"제발1"];
-    [dataArr addObject:@"제발2"];
-    [dataArr addObject:@"제발3"];
-    [dataArr addObject:@"제발4"];
-    [dataArr addObject:@"제발5"];
-    [dataArr addObject:@"제발6"];
-    [dataArr addObject:@"제발7"];
-    [dataArr addObject:@"제발8"];
-    [dataArr addObject:@"제발9"];
-    [dataArr addObject:@"제발10"];
-    [dataArr addObject:@"제발11"];
-    [dataArr addObject:@"제발12"];
-    [dataArr addObject:@"제발 좀~~~~"];
+    dataArr = [[NSMutableArray alloc]init];
+    chatContent = [[NSMutableArray alloc]init];
+    
+    for(int i = 0 ; i < 12; i++)
+    {
+      
+        NSString* a = @"내용";
+        NSString* combine = [NSString stringWithFormat:@"%@ %d", a, i];
+    
+        [chatContent addObject:chatName];
+        [chatContent addObject:combine];
+        NSString* date = [dateFormat stringFromDate:[NSDate date]];
+        [chatContent addObject:date];
+        NSLog(@"%@", chatContent);
+        [dataArr addObject:chatContent];
+        NSLog(@"%@", dataArr);
+    }
+    
+    NSLog(@"%@", dataArr);
+    
+//    [dataArr addObject:@"들어가라"];
+//    [dataArr addObject:@"제발1"];
+//    [dataArr addObject:@"제발2"];
+//    [dataArr addObject:@"제발3"];
+//    [dataArr addObject:@"제발4"];
+//    [dataArr addObject:@"제발5"];
+//    [dataArr addObject:@"제발6"];
+//    [dataArr addObject:@"제발7"];
+//    [dataArr addObject:@"제발8"];
+//    [dataArr addObject:@"제발9"];
+//    [dataArr addObject:@"제발10"];
+//    [dataArr addObject:@"제발11"];
+//    [dataArr addObject:@"제발12"];
+//    [dataArr addObject:@"제발 좀~~~~"];
     
     [self scrollToBottom];
     
@@ -88,16 +119,18 @@
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-    printf("input\n");
     
     if(![textMessage.text isEqual:@""])
     {
-        [dataArr addObject:textMessage.text];
-        textMessage.text = @"";
-        [self scrollToBottom];
+        [chatContent addObject:chatName];
+        [chatContent addObject:textField.text];
+        NSString* date = [dateFormat stringFromDate:[NSDate date]];
+        [chatContent addObject:date];
+
     }
     
     [textMessage resignFirstResponder];
+    
     
     return true;
 }
@@ -156,7 +189,6 @@
     struct sockaddr_in serveraddr;
     int client_len;
     
-    NSDictionary* inputData = [[NSDictionary alloc]init];
     
     if((server_sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
     {

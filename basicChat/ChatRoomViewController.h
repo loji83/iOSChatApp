@@ -21,7 +21,11 @@
 @property UITextField* textMessage;
 @property ChatRoomViewCell* cell;
 @property NSMutableArray* dataArr;
-@property NSInputStream* iStream;
-@property NSOutputStream* oStream;
+
+@property NSString* chatName;
+@property NSMutableArray* chatContent;
+@property NSDateFormatter* dateFormat;
+
 @property int server_sockfd;
+
 @end

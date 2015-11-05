@@ -13,9 +13,9 @@
 		3DB2688B1BBB6454000A4590 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DB268891BBB6454000A4590 /* LaunchScreen.storyboard */; };
 		3DB268961BBB6455000A4590 /* basicChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB268951BBB6455000A4590 /* basicChatTests.m */; };
 		3DB268A11BBB6455000A4590 /* basicChatUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB268A01BBB6455000A4590 /* basicChatUITests.m */; };
-		3DB268B41BBB662B000A4590 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB268B31BBB662B000A4590 /* LoginViewController.m */; settings = {ASSET_TAGS = (); }; };
-		3DB268B81BBB669F000A4590 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB268B71BBB669F000A4590 /* ChatRoomViewController.m */; settings = {ASSET_TAGS = (); }; };
-		3DB268BB1BBBC719000A4590 /* ChatRoomViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB268BA1BBBC719000A4590 /* ChatRoomViewCell.m */; settings = {ASSET_TAGS = (); }; };
+		3DB268B41BBB662B000A4590 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB268B31BBB662B000A4590 /* LoginViewController.m */; };
+		3DB268B81BBB669F000A4590 /* ChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB268B71BBB669F000A4590 /* ChatRoomViewController.m */; };
+		3DB268BB1BBBC719000A4590 /* ChatRoomViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB268BA1BBBC719000A4590 /* ChatRoomViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,6 +230,7 @@
 				TargetAttributes = {
 					3DB268771BBB6454000A4590 = {
 						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = 2HUVC9AWHR;
 					};
 					3DB268901BBB6455000A4590 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -427,10 +428,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = basicChat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ksmartech.basicChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -438,10 +443,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = basicChat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ksmartech.basicChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

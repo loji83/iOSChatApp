@@ -13,6 +13,7 @@
 @implementation ChatRoomViewController
 {
     float kbHeight;
+    
 }
 
 @synthesize entireChat;
@@ -20,12 +21,9 @@
 @synthesize cell;
 @synthesize dataArr;
 
-@synthesize dateFormat;
-
 @synthesize server_sockfd;
 
 @synthesize chatName;
-@synthesize chatContent;
 
 
 
@@ -48,12 +46,9 @@
     textMessage = [[UITextField alloc]initWithFrame:CGRectMake(0, entireChat.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/15)];
     textMessage.backgroundColor = [UIColor blueColor];
     [textMessage setDelegate:self];
-
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
-    
-    dateFormat = [[NSDateFormatter alloc]init];
-    [dateFormat setDateFormat:@"yyyy MM dd, hh mm ss"];
     
     [self.view addSubview:self.entireChat];
     [self.view addSubview:self.textMessage];
@@ -61,57 +56,40 @@
 }
 
 
-
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self connectServer];
-    
-    NSLog(@"my Name : %@", self.chatName);
     
     dataArr = [[NSMutableArray alloc]init];
-    chatContent = [[NSMutableArray alloc]init];
     
-    for(int i = 0 ; i < 12; i++)
+    
+    //    for(int i = 0 ; i < 12; i++)
+    //    {
+    //
+    //        NSString* combine = [NSString stringWithFormat:@"content : %d", i];
+    //        [dataArr addObject:combine];
+    //        NSLog(@"dummy data created...(%d)", i);
+    //    }
+    //    NSLog(@"%@", dataArr);
+    
+    
+    
+    
+    if([dataArr count] > 0)
     {
-      
-        NSString* a = @"내용";
-        NSString* combine = [NSString stringWithFormat:@"%@ %d", a, i];
-    
-        [chatContent addObject:chatName];
-        [chatContent addObject:combine];
-        NSString* date = [dateFormat stringFromDate:[NSDate date]];
-        [chatContent addObject:date];
-        NSLog(@"%@", chatContent);
-        [dataArr addObject:chatContent];
-        NSLog(@"%@", dataArr);
+        [self scrollToBottom];
     }
     
-    NSLog(@"%@", dataArr);
-    
-//    [dataArr addObject:@"들어가라"];
-//    [dataArr addObject:@"제발1"];
-//    [dataArr addObject:@"제발2"];
-//    [dataArr addObject:@"제발3"];
-//    [dataArr addObject:@"제발4"];
-//    [dataArr addObject:@"제발5"];
-//    [dataArr addObject:@"제발6"];
-//    [dataArr addObject:@"제발7"];
-//    [dataArr addObject:@"제발8"];
-//    [dataArr addObject:@"제발9"];
-//    [dataArr addObject:@"제발10"];
-//    [dataArr addObject:@"제발11"];
-//    [dataArr addObject:@"제발12"];
-//    [dataArr addObject:@"제발 좀~~~~"];
-    
-    [self scrollToBottom];
     
 }
 
 -(void)scrollToBottom
 {
+    NSLog(@"scroll action");
     [entireChat reloadData];
+    NSLog(@"%@", [entireChat description]);
     NSIndexPath* ip = [NSIndexPath indexPathForRow: [entireChat numberOfRowsInSection:0]-1 inSection:0];
-    [entireChat scrollToRowAtIndexPath:ip  atScrollPosition:UITableViewScrollPositionTop animated:true];
+    NSLog(@"ip : %@, count : %d", ip, (int)[dataArr count]);
+    
     
 }
 
@@ -119,26 +97,38 @@
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField
 {
+    NSLog(@"return");
+    
+    
+    
     
     if(![textMessage.text isEqual:@""])
     {
-        [chatContent addObject:chatName];
-        [chatContent addObject:textField.text];
-        NSString* date = [dateFormat stringFromDate:[NSDate date]];
-        [chatContent addObject:date];
-
+        
+        [self sendContext:chatName andText:textField.text andTime:@"hh-mm-ss"];
+        
+        
+        NSMutableArray* chatArray = [[NSMutableArray alloc]initWithCapacity:3];
+        [chatArray addObject:chatName];
+        [chatArray addObject:textMessage.text];
+        [chatArray addObject:@"시간"];
+        
+        
+        
+        textMessage.text = @"";
     }
     
     [textMessage resignFirstResponder];
-    
     
     return true;
 }
 
 
 
+
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"count");
     
     return [dataArr count];
 }
@@ -146,7 +136,7 @@
 
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSLog(@"table");
     cell = [self.entireChat dequeueReusableCellWithIdentifier:@"Cell"];
     if(cell == NULL)
     {
@@ -170,13 +160,56 @@
     [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + kbHeight, self.view.frame.size.width, self.view.frame.size.height)];
 }
 
+-(int) sendContext : (NSString*) Username andText : (NSString*) chattext andTime : (NSString*)nowTime
+{
+    NSLog(@"sending");
+    NSString* now = [NSString stringWithString:nowTime];
+
+    const char* name = [chatName UTF8String];
+    const char* text = [textMessage.text cStringUsingEncoding:NSUTF8StringEncoding];
+    const char* time = [now cStringUsingEncoding:NSUTF8StringEncoding];
+    
+    printf("%lu",sizeof(&chatName));
+    
+    
+    
+    send(server_sockfd, name, sizeof(name), 0);
+    printf("sizeof name : %lu\n", sizeof(name));
+    memset((void*) name, 0x00, sizeof(name));
+    read(server_sockfd, (void*)name, sizeof(name));
+    
+    send(server_sockfd, text, sizeof(text), 0);
+    memset((void*) text, 0x00, sizeof(text));
+    read(server_sockfd, (void*)text, sizeof(text));
+    
+    send(server_sockfd, time, sizeof(time), 0);
+    printf("sizeof time : %lu\n", sizeof(time));
+    printf("sizrof time : %lu\n", sizeof(&time));
+    memset((void*) time, 0x00, sizeof(time));
+    read(server_sockfd, (void*)time, sizeof(time));
+
+    
+    
+    
+    return 0;
+}
+
 
 -(void) viewWillDisappear:(BOOL)animated
 {
+    NSLog(@"exit");
     
     [self.textMessage resignFirstResponder];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
+    
+
+    //종료 메세지 전달
+    
+    [self sendContext:@"admin" andText:@"exit" andTime:@"hh-mm-ss"];
+
+
     close(server_sockfd);
     printf("socket close\n");
     cell = nil;
@@ -184,11 +217,12 @@
     
 }
 
--(void) connectServer
+-(int) connectServer : (NSString*) name
 {
     struct sockaddr_in serveraddr;
     int client_len;
     
+    chatName = name;
     
     if((server_sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
     {
@@ -198,18 +232,20 @@
     serveraddr.sin_family = AF_INET;
     serveraddr.sin_addr.s_addr = inet_addr("192.168.0.23");
     serveraddr.sin_port = htons(8000);
-    
     client_len = sizeof(serveraddr);
     
     if((connect(server_sockfd, (struct sockaddr*) &serveraddr, client_len)) == 0)
     {
         printf("connect complete\n");
+        
     }else
     {
         printf("connect fail\n");
+        return 1;
+        
     };
     
-    char message[1024] = "dfghdfg";
+    const char *message = [chatName cStringUsingEncoding:NSUTF8StringEncoding];
     
     if((send(server_sockfd, message, 1024, 0)) == -1)
     {
@@ -217,6 +253,8 @@
     }else{
         printf("send ok\n");
     };
+    
+    return 0;
     
 }
 

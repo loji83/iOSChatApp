@@ -52,7 +52,7 @@
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-    [self.userName resignFirstResponder];
+    [userName resignFirstResponder];
     return true;
 }
 
@@ -60,14 +60,17 @@
 
 -(void)enterChat:(UIButton *)enterButton
 {
+    [userName resignFirstResponder];
     if([userName.text isEqualToString:@""])
     {
         NSLog(@"이름을 입력해주세요");
         return;
     }
-
-    chatRoomController.chatName = [[NSString alloc]initWithString:userName.text];
- 
+    if([chatRoomController connectServer : userName.text] != 0)
+    {
+        return;
+    };
+    
     [[self navigationController] pushViewController:chatRoomController animated:true];
     
 }

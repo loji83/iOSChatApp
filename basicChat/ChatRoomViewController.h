@@ -15,17 +15,22 @@
 #import <UIKit/UIKit.h>
 #import "ChatRoomViewCell.h"
 
+
 @interface ChatRoomViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,  UITextFieldDelegate, NSStreamDelegate>
+
 
 @property UITableView* entireChat;
 @property UITextField* textMessage;
+
+@property NSString* chatName;
+
 @property ChatRoomViewCell* cell;
 @property NSMutableArray* dataArr;
 
-@property NSString* chatName;
-@property NSMutableArray* chatContent;
-@property NSDateFormatter* dateFormat;
-
 @property int server_sockfd;
+
+
+
+-(int) connectServer : (NSString*) name;
 
 @end

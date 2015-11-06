@@ -15,6 +15,7 @@
 @property (strong, nonatomic)UITextField* userName;
 @property (strong, nonatomic)ChatRoomViewController* chatRoomController;
 @property (strong, nonatomic)UIView* totalLoginView;
+
 -(void) enterChat:(UIButton*)enterButton;
 
 @end
